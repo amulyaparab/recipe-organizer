@@ -132,6 +132,7 @@ export const AllRecipes = () => {
             <label>
               Recipe Name
               <input
+                required
                 placeholder="recipe name"
                 value={state?.newRecipe?.recipeName}
                 onChange={(event) =>
@@ -142,6 +143,7 @@ export const AllRecipes = () => {
             <label>
               Cuisine
               <input
+                required
                 placeholder="cuisine"
                 value={state?.newRecipe?.cuisineType}
                 onChange={(event) =>
@@ -168,6 +170,7 @@ export const AllRecipes = () => {
             <label>
               Ingredients
               <input
+                required
                 placeholder="ingredients"
                 value={state?.newRecipe?.ingredients}
                 onChange={(event) =>
@@ -181,8 +184,9 @@ export const AllRecipes = () => {
             <label>
               Instructions
               <textarea
+                required
                 placeholder="instructions"
-                value={state?.newRecipe?.instructions}
+                value={state?.newRecipe?.cookingInstructions}
                 onChange={(event) =>
                   dispatch({
                     type: "RECIPE_INSTRUCTIONS",
