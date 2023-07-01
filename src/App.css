@@ -36,3 +36,57 @@
     transform: rotate(360deg);
   }
 }
+.posts {
+  margin: 1rem 3rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.post {
+  border: #282c34 solid 2px;
+  position: relative;
+}
+.post img {
+  width: 300px;
+  height: 300px;
+  cursor: pointer;
+}
+.post i {
+  position: absolute;
+  top: 10px;
+  right: 1rem;
+  background-color: aliceblue;
+  padding: 1rem;
+  border-radius: 5px;
+}
+.post .trash {
+  right: 3rem;
+}
+.post button {
+  border: none;
+  background-color: #ffffff;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 0.3rem;
+}
+.post button:hover {
+  background-color: #282c34;
+  color: #ffffff;
+}
+.singlePost img {
+  width: 300px;
+  height: 400px;
+}
+.singlePost {
+  border: #282c34 solid 2px;
+  width: 80%;
+  margin: auto;
+}
+.flex-post {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.plus {
+  font-size: 60px;
+}
