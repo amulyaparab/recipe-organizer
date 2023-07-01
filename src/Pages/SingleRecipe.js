@@ -9,7 +9,7 @@ export const SingleRecipe = () => {
     (recipe) => recipe.id == recipeId
   );
   const navigate = useNavigate();
-  console.log(findRecipe);
+
   return (
     <>
       <i class="fa-solid fa-backward plus" onClick={() => navigate("/")}></i>

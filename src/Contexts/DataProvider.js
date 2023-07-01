@@ -129,7 +129,6 @@ export const DataProvider = ({ children }) => {
           idToBeEdited: action.idPayload,
         };
       case "EDIT":
-        console.log("hi");
         return {
           ...state,
 
@@ -157,7 +156,7 @@ export const DataProvider = ({ children }) => {
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log(state);
+
   useEffect(() => {
     if (localStorage.getItem("arrayOfRecipes")) {
       return;

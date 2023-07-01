@@ -9,7 +9,7 @@ export const AllRecipes = () => {
   const [showNewRecipeForm, setShowNewRecipeForm] = useState(false);
 
   const isRecipeInArray = state?.newRecipe?.id === state?.idToBeEdited;
-  console.log(isRecipeInArray);
+
   return (
     <>
       <h1>All Recipes</h1>
