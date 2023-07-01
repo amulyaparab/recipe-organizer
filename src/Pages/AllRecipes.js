@@ -46,7 +46,7 @@ export const AllRecipes = () => {
         />
         Cuisine
       </label>
-      <p>(Reload twice if you clear localstorage)</p>
+      <p>(Please reload once and reload twice if you clear localstorage.)</p>
       <div className="posts">
         {state?.filteredRecipes?.map(
           ({
