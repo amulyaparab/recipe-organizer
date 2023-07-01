@@ -77,6 +77,7 @@ export const DataProvider = ({ children }) => {
           },
         };
       case "ADD_RECIPE":
+        state.newRecipe = { ...state.newRecipe, id: uuid() };
         const arrayInLocalstorage = JSON.parse(
           localStorage.getItem("arrayOfRecipes")
         );

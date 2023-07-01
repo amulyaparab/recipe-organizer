@@ -46,6 +46,7 @@ export const AllRecipes = () => {
         />
         Cuisine
       </label>
+      <p>(Reload twice if you clear localstorage)</p>
       <div className="posts">
         {state?.filteredRecipes?.map(
           ({
@@ -109,7 +110,17 @@ export const AllRecipes = () => {
 
       {showNewRecipeForm && (
         <div className="overlay">
-          <div className="form">
+          <form
+            className="form"
+            onSubmit={(event) => {
+              event.preventDefault();
+              isRecipeInArray
+                ? dispatch({ type: "EDIT" })
+                : dispatch({ type: "ADD_RECIPE" });
+              setShowNewRecipeForm(false);
+              dispatch({ type: "CLEAR_FORM" });
+            }}
+          >
             <i
               class="fa-solid fa-circle-xmark cross"
               value={state?.newRecipe?.recipeName}
@@ -121,6 +132,7 @@ export const AllRecipes = () => {
             <label>
               Recipe Name
               <input
+                placeholder="recipe name"
                 value={state?.newRecipe?.recipeName}
                 onChange={(event) =>
                   dispatch({ type: "RECIPE_NAME", payload: event.target.value })
@@ -130,6 +142,7 @@ export const AllRecipes = () => {
             <label>
               Cuisine
               <input
+                placeholder="cuisine"
                 value={state?.newRecipe?.cuisineType}
                 onChange={(event) =>
                   dispatch({
@@ -142,6 +155,7 @@ export const AllRecipes = () => {
             <label>
               Image
               <input
+                placeholder="recipe url please"
                 value={state?.newRecipe?.imageUrl}
                 onChange={(event) =>
                   dispatch({
@@ -154,6 +168,7 @@ export const AllRecipes = () => {
             <label>
               Ingredients
               <input
+                placeholder="ingredients"
                 value={state?.newRecipe?.ingredients}
                 onChange={(event) =>
                   dispatch({
@@ -166,6 +181,7 @@ export const AllRecipes = () => {
             <label>
               Instructions
               <textarea
+                placeholder="instructions"
                 value={state?.newRecipe?.instructions}
                 onChange={(event) =>
                   dispatch({
@@ -175,18 +191,8 @@ export const AllRecipes = () => {
                 }
               ></textarea>
             </label>
-            <button
-              onClick={() => {
-                isRecipeInArray
-                  ? dispatch({ type: "EDIT" })
-                  : dispatch({ type: "ADD_RECIPE" });
-                setShowNewRecipeForm(false);
-                dispatch({ type: "CLEAR_FORM" });
-              }}
-            >
-              Post
-            </button>
-          </div>
+            <button onClick={() => dispatch({ type: "ADD_ID" })}>Post</button>
+          </form>
         </div>
       )}
     </>

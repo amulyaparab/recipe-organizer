@@ -3,7 +3,7 @@ import { recipes } from "../Database/recipes";
 
 export const SingleRecipe = () => {
   const { recipeId } = useParams();
-  const findRecipe = recipes.find((recipe) => recipe.id === Number(recipeId));
+  const findRecipe = recipes.find((recipe) => recipe.id == recipeId);
   const navigate = useNavigate();
   return (
     <>
