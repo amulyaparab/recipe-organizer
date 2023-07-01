@@ -23,7 +23,7 @@ export const DataProvider = ({ children }) => {
       case "SEARCH_BY":
         return {
           ...state,
-          filteredRecipes: state.filteredRecipes.filter((recipe) =>
+          filteredRecipes: state.recipes.filter((recipe) =>
             state.category === "ingredients"
               ? recipe[state.category]
                   .join("")
