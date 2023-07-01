@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { recipes } from "../Database/recipes";
+
 import { useData } from "../Contexts/DataProvider";
 import { useState } from "react";
 
@@ -7,33 +7,9 @@ export const AllRecipes = () => {
   const navigate = useNavigate();
   const { state, dispatch } = useData();
   const [showNewRecipeForm, setShowNewRecipeForm] = useState(false);
-  //    {
-  //     id: 1,
-  //     recipeName: "Spaghetti Bolognese",
-  //     imageUrl:
-  //       "https://images.pexels.com/photos/2433979/pexels-photo-2433979.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  //     ingredients: [
-  //       "250g spaghetti",
-  //       "400g ground beef",
-  //       "1 onion, chopped",
-  //       "2 garlic cloves, minced",
-  //       "400g canned diced tomatoes",
-  //       "1 tablespoon tomato paste",
-  //       "1 teaspoon dried oregano",
-  //       "1 teaspoon dried basil",
-  //       "Salt and pepper to taste",
-  //       "Parmesan cheese, grated (for garnish)",
-  //     ],
-  //     cookingInstructions: [
-  //       "Cook the spaghetti according to package instructions until al dente.",
-  //       "In a large pan, brown the ground beef over medium heat.",
-  //       "Add the chopped onion and minced garlic to the pan, and sauté until the onion is translucent.",
-  //       "Stir in the diced tomatoes, tomato paste, dried oregano, dried basil, salt, and pepper.",
-  //       "Simmer the sauce for 15-20 minutes, allowing the flavors to meld together.",
-  //       "Serve the sauce over the cooked spaghetti, and garnish with grated Parmesan cheese.",
-  //     ],
-  //     cuisineType: "Italian",
-  //   },
+
+  const isRecipeInArray = state?.newRecipe?.id === state?.idToBeEdited;
+  console.log(isRecipeInArray);
   return (
     <>
       <h1>All Recipes</h1>
@@ -71,7 +47,7 @@ export const AllRecipes = () => {
         Cuisine
       </label>
       <div className="posts">
-        {state.filteredRecipes.map(
+        {state?.filteredRecipes?.map(
           ({
             id,
             recipeName,
@@ -86,15 +62,41 @@ export const AllRecipes = () => {
                 alt={recipeName}
                 onClick={() => navigate(`/recipe/${id}`)}
               />
-              <i class="fa-solid fa-pen "></i>
-              <i class="fa-solid fa-trash trash"></i>
+              <i
+                class="fa-solid fa-pen"
+                onClick={() => {
+                  setShowNewRecipeForm(true);
+                  dispatch({
+                    type: "SHOW_EDIT",
+                    payload: {
+                      id,
+                      recipeName,
+                      imageUrl,
+                      ingredients,
+                      cookingInstructions,
+                      cuisineType,
+                    },
+                    idPayload: id,
+                  });
+                }}
+              ></i>
+              <i
+                class="fa-solid fa-trash trash"
+                onClick={() => dispatch({ type: "DELETE", payload: id })}
+              ></i>
               <h3>{recipeName}</h3>
               <p>Cuisine Type: {cuisineType}</p>
               <p>
-                Ingredients: <button>See recipe</button>
+                Ingredients:{" "}
+                <button onClick={() => navigate(`/recipe/${id}`)}>
+                  See recipe
+                </button>
               </p>
               <p>
-                Instructions: <button>See recipe </button>
+                Instructions:{" "}
+                <button onClick={() => navigate(`/recipe/${id}`)}>
+                  See recipe{" "}
+                </button>
               </p>
             </div>
           )
@@ -103,14 +105,90 @@ export const AllRecipes = () => {
           class="fa-solid fa-circle-plus plus"
           onClick={() => setShowNewRecipeForm(!showNewRecipeForm)}
         ></i>
-        {showNewRecipeForm && (
-          <div>
-            <label>
-              <input />
-            </label>
-          </div>
-        )}
       </div>
+
+      {showNewRecipeForm && (
+        <div className="overlay">
+          <div className="form">
+            <i
+              class="fa-solid fa-circle-xmark cross"
+              value={state?.newRecipe?.recipeName}
+              onClick={() => {
+                setShowNewRecipeForm(false);
+                dispatch({ type: "CLEAR_FORM" });
+              }}
+            ></i>
+            <label>
+              Recipe Name
+              <input
+                value={state?.newRecipe?.recipeName}
+                onChange={(event) =>
+                  dispatch({ type: "RECIPE_NAME", payload: event.target.value })
+                }
+              />
+            </label>
+            <label>
+              Cuisine
+              <input
+                value={state?.newRecipe?.cuisineType}
+                onChange={(event) =>
+                  dispatch({
+                    type: "RECIPE_CUISINE",
+                    payload: event.target.value,
+                  })
+                }
+              />
+            </label>
+            <label>
+              Image
+              <input
+                value={state?.newRecipe?.imageUrl}
+                onChange={(event) =>
+                  dispatch({
+                    type: "RECIPE_IMAGE",
+                    payload: event.target.value,
+                  })
+                }
+              />
+            </label>
+            <label>
+              Ingredients
+              <input
+                value={state?.newRecipe?.ingredients}
+                onChange={(event) =>
+                  dispatch({
+                    type: "RECIPE_INGREDIENTS",
+                    payload: event.target.value,
+                  })
+                }
+              />
+            </label>
+            <label>
+              Instructions
+              <textarea
+                value={state?.newRecipe?.instructions}
+                onChange={(event) =>
+                  dispatch({
+                    type: "RECIPE_INSTRUCTIONS",
+                    payload: event.target.value,
+                  })
+                }
+              ></textarea>
+            </label>
+            <button
+              onClick={() => {
+                isRecipeInArray
+                  ? dispatch({ type: "EDIT" })
+                  : dispatch({ type: "ADD_RECIPE" });
+                setShowNewRecipeForm(false);
+                dispatch({ type: "CLEAR_FORM" });
+              }}
+            >
+              Post
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };

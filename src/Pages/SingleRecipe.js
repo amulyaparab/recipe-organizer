@@ -1,17 +1,13 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { recipes } from "../Database/recipes";
 
 export const SingleRecipe = () => {
   const { recipeId } = useParams();
   const findRecipe = recipes.find((recipe) => recipe.id === Number(recipeId));
-  //    id,
-  //             recipeName,
-  //             imageUrl,
-  //             ingredients,
-  //             cookingInstructions,
-  //             cuisineType,
+  const navigate = useNavigate();
   return (
     <>
+      <i class="fa-solid fa-backward plus" onClick={() => navigate("/")}></i>
       <h1>{findRecipe?.recipeName}</h1>
       <div className="singlePost">
         <h3>{findRecipe?.recipeName}</h3>

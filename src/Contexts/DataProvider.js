@@ -1,9 +1,17 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import { recipes } from "../Database/recipes";
-
+import { v4 as uuid } from "uuid";
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
+  const storeInLocalStorage = () => {
+    try {
+      localStorage.setItem("arrayOfRecipes", JSON.stringify(state.recipes));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const reducer = (state, action) => {
     switch (action.type) {
       case "SEARCH_BY_NAME":
@@ -17,15 +25,115 @@ export const DataProvider = ({ children }) => {
           ...state,
           filteredRecipes: recipes.filter((recipe) =>
             state.category === "ingredients"
-              ? recipe[state.category].map((ingredient) =>
-                  ingredient
-                    .toLowerCase()
-                    .trim()
-                    .includes(action.payload.toLowerCase())
-                )
+              ? recipe[state.category]
+                  .join("")
+                  .toLowerCase()
+                  .trim()
+                  .includes(action.payload.toLowerCase())
               : recipe[state.category]
                   .toLowerCase()
                   .includes(action.payload.toLowerCase())
+          ),
+        };
+      case "RECIPE_NAME":
+        return {
+          ...state,
+          newRecipe: {
+            ...state.newRecipe,
+            id: uuid(),
+            recipeName: action.payload,
+          },
+        };
+      case "RECIPE_CUISINE":
+        return {
+          ...state,
+          newRecipe: {
+            ...state.newRecipe,
+            cuisineType: action.payload,
+          },
+        };
+      case "RECIPE_IMAGE":
+        return {
+          ...state,
+          newRecipe: {
+            ...state.newRecipe,
+            imageUrl: action.payload,
+          },
+        };
+      case "RECIPE_INGREDIENTS":
+        return {
+          ...state,
+          newRecipe: {
+            ...state.newRecipe,
+            ingredients: [action.payload],
+          },
+        };
+      case "RECIPE_INSTRUCTIONS":
+        return {
+          ...state,
+          newRecipe: {
+            ...state.newRecipe,
+            cookingInstructions: [action.payload],
+          },
+        };
+      case "ADD_RECIPE":
+        const arrayInLocalstorage = JSON.parse(
+          localStorage.getItem("arrayOfRecipes")
+        );
+
+        localStorage.setItem(
+          "arrayOfRecipes",
+          JSON.stringify([...arrayInLocalstorage, state.newRecipe])
+        );
+        return {
+          ...state,
+          recipes: [...state.recipes, state.newRecipe],
+          filteredRecipes: [...state.filteredRecipes, state.newRecipe],
+        };
+      case "CLEAR_FORM":
+        return {
+          ...state,
+          newRecipe: {
+            id: "",
+            recipeName: "",
+            imageUrl: "",
+            ingredients: [],
+            cookingInstructions: [],
+            cuisineType: "",
+          },
+        };
+      case "DELETE":
+        const arrayInLocalstorageNow = JSON.parse(
+          localStorage.getItem("arrayOfRecipes")
+        );
+
+        localStorage.setItem(
+          "arrayOfRecipes",
+          JSON.stringify(
+            arrayInLocalstorageNow.filter(
+              (recipe) => recipe.id !== action.payload
+            )
+          )
+        );
+        return {
+          ...state,
+          filteredRecipes: state.filteredRecipes.filter(
+            (recipe) => recipe.id !== action.payload
+          ),
+        };
+      case "SHOW_EDIT":
+        return {
+          ...state,
+          newRecipe: action.payload,
+          idToBeEdited: action.idPayload,
+        };
+      case "EDIT":
+        console.log("hi");
+        return {
+          ...state,
+
+          filteredRecipes: state.filteredRecipes.map((recipe) =>
+            recipe.id === state.newRecipe.id ? state.newRecipe : recipe
           ),
         };
       default:
@@ -34,10 +142,28 @@ export const DataProvider = ({ children }) => {
   };
   const initialState = {
     recipes: recipes,
-    filteredRecipes: recipes,
+    filteredRecipes: JSON.parse(localStorage.getItem("arrayOfRecipes")),
     category: "recipeName",
+    idToBeEdited: "",
+    newRecipe: {
+      id: "",
+      recipeName: "",
+      imageUrl: "",
+      ingredients: [],
+      cookingInstructions: [],
+      cuisineType: "",
+    },
   };
+
   const [state, dispatch] = useReducer(reducer, initialState);
+  console.log(state);
+  useEffect(() => {
+    if (localStorage.getItem("arrayOfRecipes")) {
+      return;
+    } else {
+      storeInLocalStorage();
+    }
+  }, [state.recipes]);
   return (
     <DataContext.Provider value={{ state, dispatch }}>
       {children}

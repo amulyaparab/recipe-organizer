@@ -89,4 +89,53 @@
 }
 .plus {
   font-size: 60px;
+  cursor: pointer;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: max-content;
+  background-color: #282c34;
+  color: #ffffff;
+  justify-content: space-evenly;
+  padding: 1rem;
+  margin: auto;
+  margin-top: 3rem;
+}
+.form .cross {
+  cursor: pointer;
+  font-size: 30px;
+}
+.form input {
+  display: flex;
+  width: 90%;
+  height: 1.5rem;
+}
+.form textarea {
+  display: flex;
+  height: 200px;
+  width: 90%;
+}
+i {
+  cursor: pointer;
+}
+.form button {
+  width: 92%;
+  background-color: #282c34;
+  color: #ffffff;
+  padding: 0.3rem 0;
+  box-shadow: 0 0 5px 5px #6185fb;
+  margin-top: 2rem;
+  border-radius: 5px;
+  cursor: pointer;
 }
